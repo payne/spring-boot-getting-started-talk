@@ -5,16 +5,13 @@ paginate: true
 <!-- *template: invert -->
 ---
 
-# `docker-compose up -d` is an easy button
-
-Getting started building web applications using Java & Spring Boot
-by Matt Payne, Twitter.com/MattPayneOrg
-24 September 2020.  Last updated 
-
-https://github.com/payne/docker-compose-talk
-Pull Requests are welcome!
-
-Slide tool: https://marp.app/
+# Getting started building web applications using Java & Spring Boot
+## by Matt Payne, Twitter.com/MattPayneOrg
+## 24 September 2020.  
+   * Last updated: Fri Aug 28 11:33:36 CDT 2020
+   * https://github.com/payne/spring-boot-getting-started-talk
+   * Pull Requests are welcome!
+   * Slide tool: https://marp.app/
 
 ----
 # Many Thanks, Aaron!
