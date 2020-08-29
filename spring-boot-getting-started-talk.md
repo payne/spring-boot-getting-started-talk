@@ -32,4 +32,9 @@ simple application for sending scheduled tweets.  You'll leave the session under
 
 
 
+-----
+# Quartz Schedules
+
+https://github.com/payne/nps
+
 
