@@ -25,6 +25,8 @@ paginate: true
 
 ## Abstract: 
 
+Get started with Spring Boot by building an application for sending scheduled tweets. Get started learning about the Spring Boot ecosystem.
+
 We'll walk through the steps to get started with Spring Boot by building a 
 simple application for sending scheduled tweets.  You'll leave the session understanding how to develop & deploy a Spring Boot application and how to start learning more about the Spring Boot ecosystem.
 
