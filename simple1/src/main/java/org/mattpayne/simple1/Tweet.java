@@ -1,5 +1,7 @@
 package org.mattpayne.simple1;
 
+import lombok.Data;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -7,6 +9,7 @@ import javax.persistence.Id;
 import java.util.Date;
 
 @Entity
+@Data
 public class Tweet {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,27 +30,4 @@ public class Tweet {
         return String.format("%d: %s", id, text);
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public Date getWhen() {
-        return when;
-    }
-
-    public void setWhen(Date when) {
-        this.when = when;
-    }
 }
