@@ -33,12 +33,17 @@ public class TweetService {
         setup();
     }
 
+    public String updateStatus(String statusText) throws TwitterException {
+        Status status = twitter.updateStatus(statusText);
+        return status.getText();
+    }
+
     private void run() throws TwitterException {
         Status status = twitter.updateStatus("First tweet.");
         System.out.println("Tweet sent? " + status.getText());
     }
 
-    public void setup() throws IOException {
+    private void setup() throws IOException {
         String consumerKey = fetchFromEnvOrDotEnvFile("TWITTER_CONSUMER_KEY");
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
