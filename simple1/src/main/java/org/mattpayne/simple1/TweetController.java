@@ -10,11 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class TweetController {
 
-    /*
-    @Autowired
-    private TweetService tweetService;
-     */
-
     @GetMapping("/")
     public String tweetinForm(Model model) {
         model.addAttribute("tweet",new Tweet());
