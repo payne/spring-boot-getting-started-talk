@@ -1,6 +1,7 @@
 package org.mattpayne.simple1;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.quartz.*;
 import org.springframework.boot.CommandLineRunner;
@@ -15,11 +16,14 @@ import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
 
 @SpringBootApplication
 public class Simple1Application implements CommandLineRunner {
-
-	@Autowired
 	private TweetRepository tweetRepository;
 
+	public Simple1Application(TweetRepository tweetRepository) {
+		this.tweetRepository=tweetRepository;
+	}
+
 	public static void main(String[] args) {
+		System.setProperty("spring.profiles.default","dev");
 		SpringApplication.run(Simple1Application.class, args);
 	}
 
@@ -33,6 +37,20 @@ public class Simple1Application implements CommandLineRunner {
 		Iterable<Tweet> allTweets = tweetRepository.findAll();
 		allTweets.forEach(System.out::println);
 	}
+
+
+	/*
+	@Configuration
+	public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+		@Override
+		protected void configure(HttpSecurity http) throws Exception {
+			http.requiresChannel()
+					.requestMatchers(r -> r.getHeader("X-Forwarded-Proto") != null)
+					.requiresSecure();
+		}
+	}
+	 */
 
 
 	@Bean
