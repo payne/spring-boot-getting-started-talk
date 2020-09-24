@@ -3,6 +3,7 @@ package org.mattpayne.simple1;
 import lombok.extern.log4j.Log4j2;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,13 @@ import static org.quartz.CronScheduleBuilder.*;
 @Controller
 public class TweetController {
     private static SchedulerFactory schedulerFactory = new StdSchedulerFactory();
+    private ApplicationContext applicationContext;
+
+    public TweetController(ApplicationContext ac) {
+        this.applicationContext=ac;
+    }
+
+
     @GetMapping("/")
     public String tweetinForm(Model model) {
         model.addAttribute("tweet", new Tweet());
@@ -33,6 +41,7 @@ public class TweetController {
                     .withDescription("Created with quartz: " + tweet.getQuartz())
                     .build();
             jdetail.getJobDataMap().put("tweet", tweet.getText());
+            jdetail.getJobDataMap().put("ac",applicationContext);
 
             Trigger trigger = TriggerBuilder.newTrigger().forJob(jdetail)
                     .withIdentity("Idenity for " + tweet.getQuartz()+" at " + new java.util.Date())

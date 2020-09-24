@@ -9,6 +9,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -41,12 +42,25 @@ public class Simple1Application implements CommandLineRunner {
 	}
 
 	@Bean
+	public TweetService oneTweetService() {
+		try {
+			return new TweetService();
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(2);
+			return null; //TODO(MGP): Clean up!
+		}
+	}
+
+	@Bean
 	public JobDetail jobDetail() {
-		return JobBuilder.newJob().ofType(SampleJob.class)
+		JobDetail jd = JobBuilder.newJob().ofType(SampleJob.class)
 				.storeDurably()
 				.withIdentity("Qrtz_Job_Detail")
 				.withDescription("Invoke Sample Job service...")
 				.build();
+		jd.getJobDataMap().put("tweet","Tweet from a bean; created at " + new java.util.Date());
+		return jd;
 	}
 
 	@Bean
@@ -57,4 +71,5 @@ public class Simple1Application implements CommandLineRunner {
 				.withSchedule(simpleSchedule().repeatForever().withIntervalInSeconds(60))
 				.build();
 	}
+
 }
