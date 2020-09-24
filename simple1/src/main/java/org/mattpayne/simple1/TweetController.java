@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.UUID;
+
 import static org.quartz.CronScheduleBuilder.*;
 
 @Log4j2
@@ -20,7 +22,7 @@ public class TweetController {
     private TweetRepository tweetRepository;
 
     public TweetController(ApplicationContext ac, TweetRepository tr) {
-        this.applicationContext=ac;
+        this.applicationContext = ac;
         this.tweetRepository = tr;
     }
 
@@ -40,18 +42,18 @@ public class TweetController {
 
             JobDetail jdetail = JobBuilder.newJob().ofType(SampleJob.class)
                     .storeDurably()
-                    .withIdentity("Demo from TweetController at "+new java.util.Date())
+                    .withIdentity("Demo from TweetController at " + new java.util.Date() + " " + UUID.randomUUID())
                     .withDescription("Created with quartz: " + tweet.getQuartz())
                     .build();
             jdetail.getJobDataMap().put(Tweet.TWEET, tweet);
-            jdetail.getJobDataMap().put(Tweet.AC,applicationContext);
+            jdetail.getJobDataMap().put(Tweet.AC, applicationContext);
 
             Trigger trigger = TriggerBuilder.newTrigger().forJob(jdetail)
-                    .withIdentity("Idenity for " + tweet.getQuartz()+" at " + new java.util.Date())
-                    .withSchedule(cronSchedule(tweet.getQuartz()))
+                    .withIdentity("Idenity for " + tweet.getQuartz() + " at " + new java.util.Date() + " " + UUID.randomUUID())
+                    .withSchedule(cronSchedule(tweet.getQuartz())) // e.g. 0 0 12 ? * * *
                     .build();
             Scheduler sched = schedulerFactory.getScheduler();
-            sched.scheduleJob(jdetail,trigger);
+            sched.scheduleJob(jdetail, trigger);
             sched.start();
 
 //            tweetService.updateStatus(tweet.getText());

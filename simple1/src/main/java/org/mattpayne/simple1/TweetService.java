@@ -7,7 +7,6 @@ import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.conf.ConfigurationBuilder;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Enumeration;
@@ -46,18 +45,18 @@ public class TweetService {
     }
 
     private void setup() throws IOException {
-        String consumerKey = fetchFromEnvOrDotEnvFile("TWITTER_CONSUMER_KEY");
+        String consumerKey = fetchFromDotEnvFile("TWITTER_CONSUMER_KEY");
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
-                .setOAuthConsumerKey(fetchFromEnvOrDotEnvFile("TWITTER_CONSUMER_KEY"))
-                .setOAuthConsumerSecret(fetchFromEnvOrDotEnvFile("TWITTER_CONSUMER_SECRET_KEY"))
-                .setOAuthAccessToken(fetchFromEnvOrDotEnvFile("TWITTER_ACCESS_TOKEN"))
-                .setOAuthAccessTokenSecret(fetchFromEnvOrDotEnvFile("TWITTER_ACCESS_TOKEN_SECRET"));
+                .setOAuthConsumerKey(fetchFromDotEnvFile("TWITTER_CONSUMER_KEY"))
+                .setOAuthConsumerSecret(fetchFromDotEnvFile("TWITTER_CONSUMER_SECRET_KEY"))
+                .setOAuthAccessToken(fetchFromDotEnvFile("TWITTER_ACCESS_TOKEN"))
+                .setOAuthAccessTokenSecret(fetchFromDotEnvFile("TWITTER_ACCESS_TOKEN_SECRET"));
         TwitterFactory tf = new TwitterFactory(cb.build());
         twitter = tf.getInstance();
     }
 
-    private String fetchFromEnvOrDotEnvFile(String fetchThisKey) throws IOException {
+    private String fetchFromDotEnvFile(String fetchThisKey) throws IOException {
         if (this.envMap == null) {
             this.envMap = new HashMap<>();
             Properties properties = new Properties();
