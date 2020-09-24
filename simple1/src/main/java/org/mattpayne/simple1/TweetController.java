@@ -17,9 +17,11 @@ import static org.quartz.CronScheduleBuilder.*;
 public class TweetController {
     private static SchedulerFactory schedulerFactory = new StdSchedulerFactory();
     private ApplicationContext applicationContext;
+    private TweetRepository tweetRepository;
 
-    public TweetController(ApplicationContext ac) {
+    public TweetController(ApplicationContext ac, TweetRepository tr) {
         this.applicationContext=ac;
+        this.tweetRepository = tr;
     }
 
 
@@ -34,6 +36,7 @@ public class TweetController {
         log.info("Recieved: " + tweet);
         try {
             log.info(String.format("Will tweet: " + tweet.getText() + " per quartz='%s'", tweet.getQuartz()));
+            tweetRepository.save(tweet);
 
             JobDetail jdetail = JobBuilder.newJob().ofType(SampleJob.class)
                     .storeDurably()
