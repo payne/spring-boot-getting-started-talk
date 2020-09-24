@@ -9,33 +9,29 @@ import twitter4j.TwitterException;
 @Log4j2
 @Component
 public class SampleJob implements Job {
-    /*
-    private final ApplicationContext applicationContext;
-
-    public SampleJob(ApplicationContext ac) {
-        this.applicationContext = ac;
-    }
-     */
 
     public void execute(JobExecutionContext context) throws JobExecutionException {
-        //jobService.executeSampleJob();
-        /*
-        TweetService tweetService = applicationContext.getBean(TweetService.class);
-        log.info("tweetService="+tweetService);
-         */
-        String tweetText = (String) context.getJobDetail().getJobDataMap().get("tweet");
-        log.info("Sample Job " + new java.util.Date());
-        log.info("tweetText=" + tweetText);
         try {
-            ApplicationContext applicationContext = (ApplicationContext) context.getJobDetail().getJobDataMap().get("ac");
-            if (applicationContext != null) {
-                TweetService tweetService = applicationContext.getBean(TweetService.class);
-                log.info("tweetService=" + tweetService);
-                tweetService.updateStatus(tweetText);
+            TweetRepository tweetRepository = null;
+            Tweet tweet = (Tweet) context.getJobDetail().getJobDataMap().get(Tweet.TWEET);
+            if (tweet != null) {
+                String tweetText = tweet.getText();
+                log.info("Sample Job " + new java.util.Date());
+                log.info("tweetText=" + tweetText);
+                ApplicationContext applicationContext = (ApplicationContext) context.getJobDetail().getJobDataMap().get(Tweet.AC);
+                tweetRepository = applicationContext.getBean(TweetRepository.class);
+                if (applicationContext != null) {
+                    TweetService tweetService = applicationContext.getBean(TweetService.class);
+                    log.info("tweetService=" + tweetService);
+                    tweetService.updateStatus(tweetText);
+                }
             }
             JobKey thisJob = context.getJobDetail().getKey();
             context.getScheduler().deleteJob(thisJob);
             log.info("Deleted job: " + thisJob);
+            if (tweet != null) {
+                tweetRepository.delete(tweet);
+            }
         } catch (SchedulerException | TwitterException e) {
             e.printStackTrace();
         }

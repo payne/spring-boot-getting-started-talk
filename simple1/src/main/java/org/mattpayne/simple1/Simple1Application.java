@@ -59,7 +59,7 @@ public class Simple1Application implements CommandLineRunner {
 				.withIdentity("Qrtz_Job_Detail")
 				.withDescription("Invoke Sample Job service...")
 				.build();
-		jd.getJobDataMap().put("tweet","Tweet from a bean; created at " + new java.util.Date());
+		// jd.getJobDataMap().put("tweet","Tweet from a bean; created at " + new java.util.Date());
 		return jd;
 	}
 

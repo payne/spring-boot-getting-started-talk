@@ -27,7 +27,7 @@ public class TweetController {
 
     @GetMapping("/")
     public String tweetinForm(Model model) {
-        model.addAttribute("tweet", new Tweet());
+        model.addAttribute(Tweet.TWEET, new Tweet());
         return "tweetin";
     }
 
@@ -43,8 +43,8 @@ public class TweetController {
                     .withIdentity("Demo from TweetController at "+new java.util.Date())
                     .withDescription("Created with quartz: " + tweet.getQuartz())
                     .build();
-            jdetail.getJobDataMap().put("tweet", tweet.getText());
-            jdetail.getJobDataMap().put("ac",applicationContext);
+            jdetail.getJobDataMap().put(Tweet.TWEET, tweet);
+            jdetail.getJobDataMap().put(Tweet.AC,applicationContext);
 
             Trigger trigger = TriggerBuilder.newTrigger().forJob(jdetail)
                     .withIdentity("Idenity for " + tweet.getQuartz()+" at " + new java.util.Date())
@@ -58,7 +58,7 @@ public class TweetController {
         } catch (Exception bland) {
             bland.printStackTrace();
         }
-        model.addAttribute("tweet", tweet);
+        model.addAttribute(Tweet.TWEET, tweet);
         return "tweetin";
     }
 }

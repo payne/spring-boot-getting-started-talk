@@ -11,6 +11,9 @@ import java.util.Date;
 @Entity
 @Data
 public class Tweet {
+    public static final String TWEET = "tweet";
+    public static final String AC = "ac";
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
