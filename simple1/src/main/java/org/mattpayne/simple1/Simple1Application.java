@@ -32,9 +32,9 @@ public class Simple1Application implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		List<String> messages = Arrays.asList("Hello world!", "Java is fun", "Spring makes it better");
-		for (String message: messages) {
-			Tweet tweet = new Tweet(message);
+	    List<Tweet> tweets = Arrays.asList(new Tweet("Java is fun!","0 35 11 ? * THU *"),
+				new Tweet("Python is the future!", "0 45 11 ? * THU *"));
+		for (Tweet tweet: tweets) {
 			tweetRepository.save(tweet);
 		}
 		Iterable<Tweet> allTweets = tweetRepository.findAll();

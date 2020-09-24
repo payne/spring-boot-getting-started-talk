@@ -23,9 +23,10 @@ public class Tweet {
     public Tweet() {
     }
 
-    public Tweet(String s) {
+    public Tweet(String s, String q) {
         this();
         text=s;
+        quartz=q;
     }
 
     public String toString() {
