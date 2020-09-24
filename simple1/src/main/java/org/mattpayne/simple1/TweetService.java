@@ -1,5 +1,6 @@
 package org.mattpayne.simple1;
 
+import lombok.extern.log4j.Log4j2;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -14,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+@Log4j2
 public class TweetService {
     private Twitter twitter;
     private Map<String, String> envMap;
@@ -23,10 +25,15 @@ public class TweetService {
         try {
             TweetService ts = new TweetService();
             ts.run();
-            System.out.println("Normal Termination.");
+            log.info("Normal Termination.");
         } catch (Exception bland) {
             bland.printStackTrace();
         }
+    }
+
+    private void run() throws TwitterException {
+        Status status = twitter.updateStatus("First tweet. at " + new java.util.Date());
+        log.info("Tweet sent? " + status.getText());
     }
 
     public TweetService() throws IOException {
@@ -36,11 +43,6 @@ public class TweetService {
     public String updateStatus(String statusText) throws TwitterException {
         Status status = twitter.updateStatus(statusText);
         return status.getText();
-    }
-
-    private void run() throws TwitterException {
-        Status status = twitter.updateStatus("First tweet.");
-        System.out.println("Tweet sent? " + status.getText());
     }
 
     private void setup() throws IOException {
@@ -64,7 +66,7 @@ public class TweetService {
             while (keys.hasMoreElements()) {
                 String key = (String) keys.nextElement();
                 String value = (String) properties.get(key);
-                envMap.put(key,value);
+                envMap.put(key, value);
             }
         }
         return envMap.get(fetchThisKey);

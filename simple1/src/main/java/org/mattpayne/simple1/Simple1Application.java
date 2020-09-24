@@ -23,6 +23,8 @@ public class Simple1Application implements CommandLineRunner {
 	}
 
 	public static void main(String[] args) {
+		// More common to set properties on the command line with -D e.g.
+		// -Dspring.profiles.active=dev
 		System.setProperty("spring.profiles.default","dev");
 		SpringApplication.run(Simple1Application.class, args);
 	}
@@ -37,21 +39,6 @@ public class Simple1Application implements CommandLineRunner {
 		Iterable<Tweet> allTweets = tweetRepository.findAll();
 		allTweets.forEach(System.out::println);
 	}
-
-
-	/*
-	@Configuration
-	public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
-		@Override
-		protected void configure(HttpSecurity http) throws Exception {
-			http.requiresChannel()
-					.requestMatchers(r -> r.getHeader("X-Forwarded-Proto") != null)
-					.requiresSecure();
-		}
-	}
-	 */
-
 
 	@Bean
 	public JobDetail jobDetail() {

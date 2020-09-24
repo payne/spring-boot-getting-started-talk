@@ -1,31 +1,52 @@
 package org.mattpayne.simple1;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.log4j.Log4j2;
+import org.quartz.*;
+import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import static org.quartz.CronScheduleBuilder.*;
+
+@Log4j2
 @Controller
 public class TweetController {
-
+    private static SchedulerFactory schedulerFactory = new StdSchedulerFactory();
     @GetMapping("/")
     public String tweetinForm(Model model) {
-        model.addAttribute("tweet",new Tweet());
+        model.addAttribute("tweet", new Tweet());
         return "tweetin";
     }
 
     @PostMapping("/")
     public String tweetSubmit(@ModelAttribute Tweet tweet, TweetService tweetService, Model model) {
-        System.out.println("Recieved: " + tweet);
+        log.info("Recieved: " + tweet);
         try {
-            System.out.println("Would tweet: " + tweet.getText());
-            tweetService.updateStatus(tweet.getText());
+            log.info(String.format("Will tweet: " + tweet.getText() + " per quartz='%s'", tweet.getQuartz()));
+
+            JobDetail jdetail = JobBuilder.newJob().ofType(SampleJob.class)
+                    .storeDurably()
+                    .withIdentity("Demo from TweetController at "+new java.util.Date())
+                    .withDescription("Created with quartz: " + tweet.getQuartz())
+                    .build();
+            jdetail.getJobDataMap().put("tweet", tweet.getText());
+
+            Trigger trigger = TriggerBuilder.newTrigger().forJob(jdetail)
+                    .withIdentity("Idenity for " + tweet.getQuartz()+" at " + new java.util.Date())
+                    .withSchedule(cronSchedule(tweet.getQuartz()))
+                    .build();
+            Scheduler sched = schedulerFactory.getScheduler();
+            sched.scheduleJob(jdetail,trigger);
+            sched.start();
+
+//            tweetService.updateStatus(tweet.getText());
         } catch (Exception bland) {
             bland.printStackTrace();
         }
-        model.addAttribute("tweet",tweet);
+        model.addAttribute("tweet", tweet);
         return "tweetin";
     }
 }

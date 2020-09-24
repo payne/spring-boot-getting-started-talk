@@ -15,8 +15,7 @@ public class Tweet {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String text;
-    private Date when;
-
+    private String quartz;
 
     public Tweet() {
     }
