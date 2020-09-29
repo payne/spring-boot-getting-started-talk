@@ -40,20 +40,20 @@ public class TweetController {
             log.info(String.format("Will tweet: " + tweet.getText() + " per quartz='%s'", tweet.getQuartz()));
             tweetRepository.save(tweet);
 
-            JobDetail jdetail = JobBuilder.newJob().ofType(SampleJob.class)
+            JobDetail jobDetail = JobBuilder.newJob().ofType(SampleJob.class)
                     .storeDurably()
                     .withIdentity("Demo from TweetController at " + new java.util.Date() + " " + UUID.randomUUID())
                     .withDescription("Created with quartz: " + tweet.getQuartz())
                     .build();
-            jdetail.getJobDataMap().put(Tweet.TWEET, tweet);
-            jdetail.getJobDataMap().put(Tweet.AC, applicationContext);
+            jobDetail.getJobDataMap().put(Tweet.TWEET, tweet);
+            jobDetail.getJobDataMap().put(Tweet.AC, applicationContext);
 
-            Trigger trigger = TriggerBuilder.newTrigger().forJob(jdetail)
+            Trigger trigger = TriggerBuilder.newTrigger().forJob(jobDetail)
                     .withIdentity("Idenity for " + tweet.getQuartz() + " at " + new java.util.Date() + " " + UUID.randomUUID())
                     .withSchedule(cronSchedule(tweet.getQuartz())) // e.g. 0 0 12 ? * * *
                     .build();
             Scheduler sched = schedulerFactory.getScheduler();
-            sched.scheduleJob(jdetail, trigger);
+            sched.scheduleJob(jobDetail, trigger);
             sched.start();
 
 //            tweetService.updateStatus(tweet.getText());
